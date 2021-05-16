@@ -1,4 +1,4 @@
-# homebridge-MotionSensor
+# homebridge-RedAlert
 
 Creates a Motion Sensor Accessory for iOS Home app/Homekit via Homebridge.
 The state of the sensor can be periodically checked or only checked when homebridge requests the current value.

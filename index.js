@@ -7,7 +7,7 @@ const DEF_TIMEOUT = 3000, //3s
 module.exports = function (homebridge) {
    Service = homebridge.hap.Service;
    Characteristic = homebridge.hap.Characteristic;
-   homebridge.registerAccessory("homebridge-MotionSensor", "Motion", HttpMotion);
+   homebridge.registerAccessory("homebridge-RedAlert", "Motion", HttpMotion);
 }
 
 

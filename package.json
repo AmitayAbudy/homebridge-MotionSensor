@@ -14,14 +14,11 @@
     "homebridge": ">=0.2.0"
   },
   "author": {
-    "name": "@amitayabudy"
+    "name": "@abudy"
   },
-  "contributors": [{
-    "name": "@amitayabudy"
-  }],
   "repository": {
     "type": "git",
-    "url": "git://github.com/lagunacomputer/homebridge-MotionSensor.git"
+    "url": "git://https://github.com/AmitayAbudy/homebridge-RedAlert.git"
   },
   "dependencies": {
     "request": "^2.0.0"

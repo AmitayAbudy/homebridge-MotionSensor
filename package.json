@@ -1,22 +1,23 @@
 {
   "name": "homebridge-MotionSensor",
   "version": "4.0.0",
-  "description": "http/https motion sensor plugin for homebridge",
+  "description": "homebridge plugin for red alerts in Israel",
   "license": "ISC",
   "keywords": [
     "homebridge-plugin",
     "http",
-    "motion sensor"
+    "sensor",
+    "red-alert"
   ],
   "engines": {
     "node": ">=0.12.0",
     "homebridge": ">=0.2.0"
   },
   "author": {
-    "name": "@lagunacomputer"
+    "name": "@amitayabudy"
   },
   "contributors": [{
-    "name": "@metbosch"
+    "name": "@amitayabudy"
   }],
   "repository": {
     "type": "git",

@@ -24,6 +24,7 @@ function HttpMotion(log, config) {
    this.timeout = DEF_TIMEOUT;
    this.json_response = config["json_response"] || "";
    this.update_interval = Number( config["update_interval"] || DEF_INTERVAL );
+   this.city = config["city"]
 
    // Internal variables
    this.last_state = false;
@@ -43,6 +44,7 @@ HttpMotion.prototype = {
       var ops = {
          uri:    this.url,
          method: this.http_method,
+         body: '{"X-Requested-With": "XMLHttpRequest", "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8", "Referer": "https://www.oref.org.il/12481-he/Pakar.aspx"}'
          timeout: this.timeout
       };
       this.log('Requesting motion on "' + ops.uri + '", method ' + ops.method + ', timeout ' + ops.timeout);
@@ -55,7 +57,7 @@ HttpMotion.prototype = {
             this.log('HTTP successful response: ' + body);
          } else {
             try {
-               value = JSON.parse(body)[this.json_response];
+               var city_alerts = JSON.parse(body)[this.json_response];
                this.log('HTTP successful response: ' + body);
             } catch (parseErr) {
                this.log('Error processing received information: ' + parseErr.message);
@@ -64,8 +66,8 @@ HttpMotion.prototype = {
          }
          if (!error) {
             // Properly set the return value
-            if (value === '1' || value === 1 || value === 'true' || value === 'TRUE') value = true;
-            else if (value === '0' || value === 0 || value === 'false' || value === 'FALSE') value = false;
+            value = city_alerts.indexOf(this.city)
+            value = value !== -1
 
             // Check if return value is valid
             if (value !== true && value !== false) {

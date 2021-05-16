@@ -1,6 +1,6 @@
 {
   "name": "homebridge-RedAlert",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "homebridge plugin for red alerts in Israel",
   "license": "ISC",
   "keywords": [

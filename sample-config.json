@@ -14,9 +14,7 @@
         {
             "accessory": "Motion",
             "name": "Red Alert Sensor",
-            "url": "https://www.oref.org.il/WarningMessages/alert/alerts.json",
-            "http_method": "GET",
-            "json_response": "data"
+            "city": "רמת גן - מערב"
         }
     ]
 }

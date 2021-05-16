@@ -2,7 +2,7 @@ var Service, Characteristic;
 const request = require('request');
 
 const DEF_TIMEOUT = 3000, //3s
-      DEF_INTERVAL = 60000; //60s
+      DEF_INTERVAL = 1000; //1s
 
 module.exports = function (homebridge) {
    Service = homebridge.hap.Service;
@@ -15,14 +15,15 @@ function HttpMotion(log, config) {
    this.log = log;
 
    // url info
-   this.url = config["url"];
-   this.http_method = config["http_method"] || "GET";
+   this.url = "https://www.oref.org.il/WarningMessages/alert/alerts.json";
+   this.http_method = "GET";
+
    this.name = config["name"];
-   this.manufacturer = config["manufacturer"] || "@lagunacomputer";
-   this.model = config["model"] || "Simple HTTP motion sensor";
-   this.serial = config["serial"] || "Non-defined serial";
+   this.manufacturer = config["manufacturer"] || "Amitay Abudy";
+   this.model = config["model"] || "RedAlertsLocator";
+   this.serial = config["serial"] || "AQZ432";
    this.timeout = DEF_TIMEOUT;
-   this.json_response = config["json_response"] || "";
+   this.json_response = "data";
    this.update_interval = Number( config["update_interval"] || DEF_INTERVAL );
    this.city = config["city"]
 
@@ -45,19 +46,18 @@ HttpMotion.prototype = {
          uri:    this.url,
          method: this.http_method,
          body: '{"X-Requested-With": "XMLHttpRequest", "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8", "Referer": "https://www.oref.org.il/12481-he/Pakar.aspx"}'
-         timeout: this.timeout
       };
-      this.log('Requesting motion on "' + ops.uri + '", method ' + ops.method + ', timeout ' + ops.timeout);
       request(ops, (error, res, body) => {
          var value = null;
+
          if (error) {
             this.log('HTTP bad response (' + ops.uri + '): ' + error.message);
-         } else if (this.json_response === "") {
-            value = body;
-            this.log('HTTP successful response: ' + body);
+         } else if (body === ''){
+            this.log("No rockets right now :)");
          } else {
             try {
                var city_alerts = JSON.parse(body)[this.json_response];
+               this.log(city_alerts);
                this.log('HTTP successful response: ' + body);
             } catch (parseErr) {
                this.log('Error processing received information: ' + parseErr.message);

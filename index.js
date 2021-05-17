@@ -1,13 +1,23 @@
 var Service, Characteristic;
 const request = require('request');
 
-const DEF_TIMEOUT = 3000, //3s
-      DEF_INTERVAL = 1000; //1s
+const DEF_INTERVAL = 1000; //1s
+
+const URL = "https://www.oref.org.il/WarningMessages/alert/alerts.json";
+const HTTP_METHOD = "GET";
+const JSON_RESPONSE = "data";
+const HEADERS = {
+            "Host": "www.oref.org.il",
+            "Connection": "close",
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "Referer": "https://www.oref.org.il/12481-he/Pakar.aspx"
+         };
 
 module.exports = function (homebridge) {
    Service = homebridge.hap.Service;
    Characteristic = homebridge.hap.Characteristic;
-   homebridge.registerAccessory("homebridge-RedAlert", "Motion", HttpMotion);
+   homebridge.registerAccessory("homebridge-RedAlert", "RedAlert", HttpMotion);
 }
 
 
@@ -15,17 +25,18 @@ function HttpMotion(log, config) {
    this.log = log;
 
    // url info
-   this.url = "https://www.oref.org.il/WarningMessages/alert/alerts.json";
-   this.http_method = "GET";
+   this.url = URL;
+   this.http_method = HTTP_METHOD;
+   this.json_response = JSON_RESPONSE;
+   this.headers = HEADERS;
 
    this.name = config["name"];
-   this.manufacturer = config["manufacturer"] || "Amitay Abudy";
-   this.model = config["model"] || "RedAlertsLocator";
-   this.serial = config["serial"] || "AQZ432";
-   this.timeout = DEF_TIMEOUT;
-   this.json_response = "data";
+   this.manufacturer = "Amitay Abudy";
+   this.model = "RedAlertsLocator";
+   this.serial = "AQZ432";
+   
    this.update_interval = Number( config["update_interval"] || DEF_INTERVAL );
-   this.city = config["city"]
+   this.city = config["city"] || "all";
 
    // Internal variables
    this.last_state = false;
@@ -45,7 +56,7 @@ HttpMotion.prototype = {
       var ops = {
          uri:    this.url,
          method: this.http_method,
-         body: '{"X-Requested-With": "XMLHttpRequest", "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8", "Referer": "https://www.oref.org.il/12481-he/Pakar.aspx"}'
+         headers: this.headers
       };
       request(ops, (error, res, body) => {
          var value = null;
@@ -53,30 +64,28 @@ HttpMotion.prototype = {
          if (error) {
             this.log('HTTP bad response (' + ops.uri + '): ' + error.message);
          } else if (body === ''){
-            this.log("No rockets right now :)");
+            error = true;
          } else {
             try {
                var city_alerts = JSON.parse(body)[this.json_response];
-               this.log(city_alerts);
-               this.log('HTTP successful response: ' + body);
+               this.log("There are alarms at: " + city_alerts);
             } catch (parseErr) {
                this.log('Error processing received information: ' + parseErr.message);
                error = parseErr;
             }
          }
          if (!error) {
-            // Properly set the return value
+            // Properly set the sensor value
             value = city_alerts.indexOf(this.city)
             value = value !== -1
+            // If city is not set
+            if (this.city == "all") value = true;
 
-            // Check if return value is valid
-            if (value !== true && value !== false) {
-                this.log('Received value is not valid. Keeping last_state: "' + this.last_state + '"');
-            } else {
-                this.motionService
-                   .getCharacteristic(Characteristic.MotionDetected).updateValue(value, null, "updateState");
-                this.last_state = value;
-            }
+            if (value) this.log("Your city is under attack! Get to the shelters right now!!");
+            this.motionService
+            .getCharacteristic(Characteristic.MotionDetected).updateValue(value, null, "updateState");
+
+            this.last_state = value;
          }
          this.waiting_response = false;
       });
@@ -94,6 +103,7 @@ HttpMotion.prototype = {
    },
 
    getServices: function () {
+      this.log("City is set to " + this.city)
       this.informationService = new Service.AccessoryInformation();
       this.informationService
       .setCharacteristic(Characteristic.Manufacturer, this.manufacturer)

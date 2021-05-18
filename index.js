@@ -17,7 +17,7 @@ const HEADERS = {
 module.exports = function (homebridge) {
    Service = homebridge.hap.Service;
    Characteristic = homebridge.hap.Characteristic;
-   homebridge.registerAccessory("homebridge-RedAlert", "RedAlert", HttpMotion);
+   homebridge.registerAccessory("homebridge-redalert", "RedAlert", HttpMotion);
 }
 
 

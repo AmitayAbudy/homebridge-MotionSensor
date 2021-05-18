@@ -1,0 +1,21 @@
+{
+  "pluginAlias": "homebridge-redalert",
+  "singular": true,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "default": "Red Alert Sensor",
+        "required": true
+      },
+      "city": {
+        "title": "City",
+        "type": "string",
+        "default": "רמת גן - מערב",
+        "required": true
+      }
+    }
+  }
+}

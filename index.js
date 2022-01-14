@@ -97,8 +97,8 @@ HttpMotion.prototype = {
       var state = this.last_state;
       var update = !this.waiting_response;
       var sync = this.update_interval === 0;
-      this.log('Call to getState: last_state is "' + state + '", will update state now "' + update + '"' );
       if (update) {
+         this.log('Call to getState: last_state is "' + state + '", will update state now "' + update + '"' );
          setImmediate(this.updateState.bind(this));
       }
       callback(null, state);

@@ -1,5 +1,6 @@
 {
   "pluginAlias": "homebridge-redalert",
+  "pluginType": "accessory",
   "singular": true,
   "schema": {
     "type": "object",

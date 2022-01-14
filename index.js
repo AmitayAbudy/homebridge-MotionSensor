@@ -79,8 +79,10 @@ HttpMotion.prototype = {
             value = city_alerts.indexOf(this.city)
             value = value !== -1
             // If city is not set
-            if (this.city == "all") value = true;
-
+            if (this.city == "all"){
+                       if (city_alerts.length >0) value = true;
+                        else value = false;
+            }
             if (value) this.log("Your city is under attack! Get to the shelters right now!!");
             this.motionService
             .getCharacteristic(Characteristic.MotionDetected).updateValue(value, null, "updateState");

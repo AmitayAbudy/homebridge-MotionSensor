@@ -1,5 +1,5 @@
 {
-  "pluginAlias": "homebridge-redalert",
+  "pluginAlias": "RedAlert",
   "pluginType": "accessory",
   "singular": true,
   "schema": {
